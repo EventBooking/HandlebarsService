@@ -1,7 +1,8 @@
 import "mocha";
 import { assert } from "chai";
+import * as sinon from "sinon";
 import { process } from "./processor";
-import { helpers } from "handlebars";
+import * as handlebars from "handlebars";
 
 describe('processor', () => {
     it('can process html and data', () => {
@@ -10,17 +11,36 @@ describe('processor', () => {
         assert.strictEqual(actual, "1234");
     });
 
-    const helperNames = [
-        "number",
-        "in",
-        "notin",
-        "money",
-        "join",
-        "join-distinct"
-    ];
+    describe('processor.helpers', () => {
+        const helperNames = [
+            "date",
+            "datetime",
+            "in", "notin",
+            "join", "join-distinct",
+            "money",
+            "number",
+            "optionaldatetime",
+            "time"
+        ];
 
-    helperNames.forEach((name) => {
-        it(`can process ${name}`, () => name in helpers);
-});
+        let mockHandlebars: sinon.SinonMock;
+        before(() => mockHandlebars = sinon.mock(handlebars));
+        after(() => mockHandlebars.restore());
+
+        helperNames.forEach((name) => {
+            it(`can process ${name}`, () => {
+                let isFound = false;
+
+                mockHandlebars
+                    .expects('compile')
+                    .returns((data: any, runtimeOptions: RuntimeOptions) => {
+                        isFound = name in runtimeOptions.helpers!;
+                    })
+
+                process("", {});
+                assert.isTrue(isFound);
+            });
+        });
+    })
 
 });

@@ -17,15 +17,10 @@ function flatMap(values: any[]): any[] {
 }
 
 export function getValues(data: any[]): IJoinValues {
-    data = flatMap(data);
-    console.log(`data=${JSON.stringify(data)}`);
-    if (data.length < 1)
-        data = [", "];
-    const pattern = data.pop();
-    console.log(`pattern=${JSON.stringify(pattern)}, data=${JSON.stringify(data)}`);
+    const values = flatMap(data);
     return {
-        pattern: pattern,
-        data: data
+        pattern: values.pop() || ", ",
+        data: values
     };
 }
 
@@ -39,7 +34,6 @@ export function joinHelper(...data: any[]) {
     // pop off the options object
     data.pop();
     const values = getValues(data);
-    console.log(`values="${JSON.stringify(values)}"`);
     const result = format(values.pattern, values.data);
     return new SafeString(result);
 }

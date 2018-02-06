@@ -1,10 +1,16 @@
 import "mocha";
 import { assert } from "chai";
-import { registerHelper, compile } from "handlebars";
+import { registerHelper, compile, unregisterHelper } from "handlebars";
 import { numberHelper } from "./numberHelper";
 
 describe('numberHelper', () => {
-    registerHelper('number', numberHelper);
+    before(() => {
+        registerHelper('number', numberHelper);
+    });
+
+    after(() => {
+        unregisterHelper('number');
+    });
 
     it('returns number', () => {
         const html = `{{ number 1234 }}`;
@@ -24,7 +30,6 @@ describe('numberHelper', () => {
         const html = `{{ number value }}`;
         const template = compile(html);
         const actual = template({ value: null });
-        console.log(JSON.stringify(actual));
         assert.strictEqual(actual, "");
     });
 
@@ -32,7 +37,6 @@ describe('numberHelper', () => {
         const html = `{{ number value }}`;
         const template = compile(html);
         const actual = template({ value: 123.4000 });
-        console.log(JSON.stringify(actual));
         assert.strictEqual(actual, "123.4");
     });
 
@@ -40,7 +44,6 @@ describe('numberHelper', () => {
         const html = `{{ number value }}`;
         const template = compile(html);
         const actual = template({ value: "123.4000" });
-        console.log(JSON.stringify(actual));
         assert.strictEqual(actual, "123.4");
     });
 });

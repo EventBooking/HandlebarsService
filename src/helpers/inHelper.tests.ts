@@ -1,10 +1,16 @@
 import "mocha";
 import { assert } from "chai";
-import { compile, registerHelper } from "handlebars";
+import { compile, registerHelper, unregisterHelper } from "handlebars";
 import { inHelper, notInHelper } from "./inHelper";
 
 describe('inHelper', () => {
-    registerHelper('in', inHelper);
+    before(() => {
+        registerHelper('in', inHelper);
+    });
+
+    after(() => {
+        unregisterHelper('in');
+    });
 
     it('returns false when no property', () => {
         const template = compile(`{{in}}`);
@@ -38,7 +44,13 @@ describe('inHelper', () => {
 });
 
 describe('notInHelper', () => {
-    registerHelper('notin', notInHelper);
+    before(() => {
+        registerHelper('notin', notInHelper);
+    });
+
+    after(() => {
+        unregisterHelper('notin');
+    });
 
     it('returns true when not matching any value', () => {
         const template = compile(`{{notin value values}}`);

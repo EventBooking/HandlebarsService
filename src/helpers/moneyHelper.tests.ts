@@ -1,10 +1,16 @@
 import "mocha";
 import { assert } from "chai";
-import { compile, registerHelper } from "handlebars";
+import { compile, registerHelper, unregisterHelper } from "handlebars";
 import { moneyHelper, MoneyLike } from "./moneyHelper";
 
 describe('moneyHelper', () => {
-    registerHelper('money', moneyHelper);
+    before(() => {
+        registerHelper('money', moneyHelper);
+    });
+
+    after(() => {
+        unregisterHelper('money');
+    });
 
     it(`returns money`, () => {
         const template = compile(`{{money value}}`);

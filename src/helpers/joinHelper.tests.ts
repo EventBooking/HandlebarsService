@@ -1,6 +1,6 @@
 import "mocha";
 import { assert } from "chai";
-import { compile, registerHelper } from "handlebars";
+import { compile, registerHelper, unregisterHelper } from "handlebars";
 import { getValues, joinHelper, joinDistinctHelper } from "./joinHelper";
 
 describe('getValues', () => {
@@ -29,7 +29,13 @@ describe('getValues', () => {
 });
 
 describe('joinHelper', () => {
-    registerHelper('join', joinHelper);
+    before(() => {
+        registerHelper('join', joinHelper);
+    });
+
+    after(() => {
+        unregisterHelper('join');
+    });
 
     it(`returns empty when no arguments`, () => {
         const template = compile(`{{join}}`);
@@ -75,7 +81,13 @@ describe('joinHelper', () => {
 });
 
 describe('joinDinstictHelper', () => {
-    registerHelper('join-distinct', joinDistinctHelper);
+    before(() => {
+        registerHelper('join-distinct', joinDistinctHelper);
+    });
+
+    after(() => {
+        unregisterHelper('join-distinct');
+    });
 
     it(`returns distinct list`, () => {
         const template = compile(`{{join-distinct list ', '}}`);
