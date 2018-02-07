@@ -3,16 +3,6 @@ import { assert } from "chai";
 import { compile, registerHelper, unregisterHelper } from "handlebars";
 import { dateRangesHelper, isContiguosDate } from "./dateRangesHelper";
 
-describe('dateRangesHelper.isContiguosDate', () => {
-    it(`returns true for contiguous dates`, () => {
-        assert.isTrue(isContiguosDate('2018-01-31', '2018-02-01'));
-    });
-
-    it(`returns false for non-contiguous dates`, () => {
-        assert.isFalse(isContiguosDate('2018-02-06', '2018-02-08'));
-    });
-});
-
 describe('dateRangesHelper', () => {
     before(() => {
         registerHelper('date-ranges', dateRangesHelper);
@@ -20,6 +10,16 @@ describe('dateRangesHelper', () => {
 
     after(() => {
         unregisterHelper('date-ranges');
+    });
+
+    describe('isContiguosDate', () => {
+        it(`returns true for contiguous dates`, () => {
+            assert.isTrue(isContiguosDate('2018-01-31', '2018-02-01'));
+        });
+    
+        it(`returns false for non-contiguous dates`, () => {
+            assert.isFalse(isContiguosDate('2018-02-06', '2018-02-08'));
+        });
     });
 
     it(`returns empty string for null`, () => {

@@ -13,28 +13,16 @@ import { dateRangesHelper } from "./helpers/dateRangesHelper";
 import { preHelper } from "./helpers/preHelper";
 
 // preprocessors
-
-type HelpersHash = { [name: string]: Function };
-const helpers: HelpersHash = {
-    "date": dateHelper,
-    "datetime": dateTimeHelper,
-    "in": inHelper, "notin": notInHelper,
-    "join": joinHelper, "join-distinct": joinDistinctHelper,
-    "money": moneyHelper,
-    "number": numberHelper,
-    "optionaldatetime": optionalDateTimeHelper,
-    "time": timeHelper,
-    "date-ranges": dateRangesHelper,
-    "pre": preHelper
-};
-
-type PreprocessorLike = (html: string) => string;
-const preprocessors: PreprocessorLike[] = [
-
-];
+import { invalidCharacterPreprocessor } from "./preprocessors/invalidCharacterPreprocessor";
+import { listPreprocessor } from "./preprocessors/listPreprocessor";
+import { tableRowPreprocessor } from "./preprocessors/tableRowPreprocessor";
 
 function preprocess(html: string) {
-    const result = preprocessors.reduce((html, fn) => fn(html), html);
+    const result = [
+        invalidCharacterPreprocessor,
+        listPreprocessor,
+        tableRowPreprocessor
+    ].reduce((html, fn) => fn(html), html);
     return result;
 }
 
@@ -42,7 +30,18 @@ export function process<T>(html: string, data: T): string {
     const processedHtml = preprocess(html);
     const template = compile(processedHtml);
     const result = template(data, {
-        helpers: helpers
+        helpers: {
+            "date": dateHelper,
+            "datetime": dateTimeHelper,
+            "in": inHelper, "notin": notInHelper,
+            "join": joinHelper, "join-distinct": joinDistinctHelper,
+            "money": moneyHelper,
+            "number": numberHelper,
+            "optionaldatetime": optionalDateTimeHelper,
+            "time": timeHelper,
+            "date-ranges": dateRangesHelper,
+            "pre": preHelper
+        }
     });
     return result;
 };
