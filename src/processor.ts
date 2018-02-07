@@ -9,6 +9,8 @@ import { moneyHelper } from "./helpers/moneyHelper";
 import { numberHelper } from "./helpers/numberHelper";
 import { optionalDateTimeHelper } from "./helpers/optionalDateTimeHelper";
 import { timeHelper } from "./helpers/timeHelper";
+import { dateRangesHelper } from "./helpers/dateRangesHelper";
+import { preHelper } from "./helpers/preHelper";
 
 // preprocessors
 
@@ -21,7 +23,9 @@ const helpers: HelpersHash = {
     "money": moneyHelper,
     "number": numberHelper,
     "optionaldatetime": optionalDateTimeHelper,
-    "time": timeHelper
+    "time": timeHelper,
+    "date-ranges": dateRangesHelper,
+    "pre": preHelper
 };
 
 type PreprocessorLike = (html: string) => string;

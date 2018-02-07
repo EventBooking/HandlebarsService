@@ -20,7 +20,9 @@ describe('processor', () => {
             "money",
             "number",
             "optionaldatetime",
-            "time"
+            "time",
+            "date-ranges",
+            "pre"
         ];
 
         let mockHandlebars: sinon.SinonMock;
