@@ -1,6 +1,6 @@
 import { SafeString, Utils } from "handlebars";
 
-interface IJoinValues {
+export interface IJoinValues {
     pattern: string;
     data: any[];
 }
